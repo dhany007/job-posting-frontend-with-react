@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React from 'react';
+import React, {Component} from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 
-function Footer() {
+class Footer extends Component {
+  render() {
   return (
-    <FooterContainer className="main-footer">
+    <Styled  className="footerNav">
       <div className="footer-middle">
         <div className="container">
           <div className="row">
@@ -98,15 +99,19 @@ function Footer() {
           </div>
         </div>
       </div>
-    </FooterContainer>
+    </Styled>
   );
+}
 }
 export default Footer;
 
-const FooterContainer = styled.footer`
+const Styled = styled.footer`
   .footer-middle {
     background-color: white;
     padding-top: 3rem;
+  }
+  .footerNav {
+    margin-left: 0px;
   }
   .footer-bottom {
     padding-top: 3rem;

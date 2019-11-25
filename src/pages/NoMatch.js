@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Navigation from '../pages/Nav';
+import Footer from '../pages/Footer';
+
 class NotFoundPage extends Component {
   render() {
     return (
+      <React.Fragment>
+        <Navigation />
       <ComponentNotFound className="container">
         <div className="row">
           <div className="col-md-12">
@@ -28,6 +33,8 @@ class NotFoundPage extends Component {
           </div>
         </div>
       </ComponentNotFound>
+      <Footer />
+      </React.Fragment>
     );
   }
 }

@@ -1,0 +1,178 @@
+import React, { Component } from 'react'
+import axios from 'axios'
+import {
+  Container, Button, Alert,
+  Card, CardText, Form, FormGroup , Input, 
+} from 'reactstrap'
+
+import Navigation from '../Nav';
+import Footer from '../Footer';
+
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage, faKey, faEnvelope, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+
+export default class Login extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      email: '',
+      name_user: '',
+      password: '',
+      logError:'',
+      isLogged: this.props.isLogged,
+    }
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange = (event) => {
+    console.log('Handle change ', event)
+    this.setState({
+      [event.target.name]: event.target.value,
+    })
+  }
+
+  handleSubmit = (event) => {
+    console.log('masuk kesini kalau tidak ada token')
+    const {
+      email,
+      name_user,
+      password,
+    } = this.state;
+
+    const data = {
+      email,
+      password,
+      name_user,
+    }
+    axios.post('http://localhost:3001/auth/register',data, {"Content-Type": "application/x-www-form-urlencoded"})
+    .then(response => {
+      console.log(response.data.token)
+      console.log('Registration res', response);
+      if(response.data.success === true) {
+        this.props.history.push('/signin')
+      }
+    })
+    .catch(err => {
+      console.log('Registration error', err);
+    })
+
+    event.preventDefault();
+  }
+
+  getToken = async (keyToken) => {
+    const resultToken = localStorage.getItem(keyToken)
+    console.log(resultToken);
+    return resultToken;
+  }
+
+  componentWillMount(){
+    this.getToken('token')
+    .then(res => {
+      if(res!==null){
+      console.log('Masuk kesini kalau punya token')
+      this.setState({
+        isLogged: true
+      })
+    }
+    })
+  }
+  
+
+  render() {
+    return (
+      <React.Fragment>
+      <Navigation isLogged={this.state.isLogged}/>
+      {this.state.isLogged&&(
+        <Container>
+        <br/>
+        <Alert color="danger">
+          You have logged in. Please <strong>sign out</strong> first.
+        </Alert>
+      </Container>
+      )}
+      {!this.state.isLogged &&
+        <Container>
+          <br/>
+          <Styled >
+          <Card className='logForm'>
+            <Form className='allCard' onSubmit={this.handleSubmit}><br/>
+              <CardText className='h3'>Create Account</CardText> <br/>
+              <CardText>Get started with your free account</CardText> <br/>
+              <Link to='#' className='btn btn-primary'><span><FontAwesomeIcon icon={faImage}/>&nbsp; Sign up with Facebook</span> </Link>{' '}
+              <Link to='#' className='btn btn-danger'><span><FontAwesomeIcon icon={faImage}/> &nbsp; Sign up with Google+</span> </Link> <br/><br/>
+              <CardText>OR</CardText>
+              <CardText className='inputData'>
+                <FormGroup className="mb-2 mb-sm-0 inputForm" >
+                  <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faEnvelope}/></span>
+                  <Input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Email"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup className="mb-2 mb-sm-0 inputForm" >
+                  <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faUser}/></span>
+                  <Input 
+                    type="text" 
+                    name="name_user" 
+                    placeholder="Name"
+                    value={this.state.name_user}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup className="mb-2 mb-sm-0 inputForm" >
+                  <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faKey}/></span>
+                  <Input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </FormGroup><br/>
+                <Button color='success' type='submit' block><span><FontAwesomeIcon icon={faSignInAlt}/>&nbsp;Create Account</span></Button><br/>      
+              <CardText>Have an account? <Link to='/signin'>sign in</Link></CardText><br/>
+              </CardText>
+            </Form>
+          </Card>
+        <br/>
+          </Styled>
+        </Container>
+      } 
+        <Footer/>  
+      </React.Fragment>  
+        
+    )
+  }
+}
+const Styled = styled.div`
+  .logForm {
+    text-align: center;
+    width: 450px;
+    margin: 0 auto;
+    background-color: #f3f3f3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  }
+  .inputForm {
+    display: flex;
+    border: 1px solid #f3f3f3;
+  }
+  .inputData {
+    padding: 0 10px;
+  }
+  .allCard {
+    background-color: white;
+  }
+  .iconIn {
+    width: 45px;
+  }
+`;

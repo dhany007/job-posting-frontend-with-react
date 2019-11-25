@@ -1,15 +1,24 @@
+/* eslint-disable no-useless-constructor */
 import React, { Component } from 'react'
-import Jumbotron from '../components/Jumbotron'
-import CardHome from '../components/CardHome'
+import Jumbotron from '../components/home/Jumbotron'
+import CardHome from '../components/home/CardHome'
 
+import Navigation from '../pages/Nav';
+import Footer from '../pages/Footer';
 
 export default class Home extends Component {
+  constructor(props){
+    super(props)
+
+  }
+
   render() {
     return (
       <React.Fragment>
-        <Jumbotron />
-        <br/>
-        <CardHome />
+        <Navigation isLogged={this.props.isLogged}/>
+          <Jumbotron />
+          <CardHome />
+        <Footer />
       </React.Fragment>
     )
   }
