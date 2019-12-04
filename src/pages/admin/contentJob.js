@@ -55,7 +55,7 @@ export default class ContentJob extends Component {
   }
 
   getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://localhost:3001/')
+    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job')
     return job.data
   }
 
@@ -107,7 +107,7 @@ export default class ContentJob extends Component {
     return resultToken;
   }
 
-  // add category
+  // add job
   handleSubmitAdd = (event) => {
     event.preventDefault()
    
@@ -123,7 +123,7 @@ export default class ContentJob extends Component {
 
     axios({
       method: 'POST',
-      url: 'http://localhost:3001/',
+      url: 'http://34.205.156.175:3001/job',
       data: qs.stringify(data),
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
@@ -146,7 +146,7 @@ export default class ContentJob extends Component {
   handleSubmitDelete = (id) => {
     axios({
       method: 'DELETE',
-      url: 'http://localhost:3001/'+id,
+      url: 'http://34.205.156.175:3001/job'+id,
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
         'x-access-token': this.getToken(),
@@ -177,7 +177,7 @@ export default class ContentJob extends Component {
     console.log(data)
     axios({
       method: 'PATCH',
-      url: 'http://localhost:3001/'+id,
+      url: 'http://34.205.156.175:3001/job'+id,
       data: qs.stringify(data),
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',

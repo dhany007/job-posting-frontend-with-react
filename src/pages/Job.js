@@ -44,7 +44,7 @@ export default class Job extends Component {
   }
 
   getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://localhost:3001/?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
+    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
     
     return job.data
   }

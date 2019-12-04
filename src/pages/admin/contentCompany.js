@@ -49,7 +49,7 @@ export default class ContentCompany extends Component {
 
   // Get all category
   getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://localhost:3001/company');
+    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/company');
     return job.data
   }
 
@@ -99,7 +99,7 @@ export default class ContentCompany extends Component {
 
     axios({
       method: 'POST',
-      url: 'http://localhost:3001/company/',
+      url: 'http://34.205.156.175:3001/company/',
       data: formData,
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
@@ -130,7 +130,7 @@ export default class ContentCompany extends Component {
   //   console.log(id)
   //   axios({
   //     method: 'PATCH',
-  //     url: 'http://localhost:3001/company/'+id,
+  //     url: 'http://34.205.156.175:3001/company/'+id,
   //     data: formData,
   //     headers : {
   //       'content-Type': 'application/x-www-form-urlencoded',
@@ -154,7 +154,7 @@ export default class ContentCompany extends Component {
   handleSubmitDelete = (id) => {
     axios({
       method: 'DELETE',
-      url: 'http://localhost:3001/company/'+id,
+      url: 'http://34.205.156.175:3001/company/'+id,
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
         'x-access-token': this.getToken(),

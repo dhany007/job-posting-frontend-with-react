@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Job from './pages/Job';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
-import DetailJob from './pages/DetailJob';
+import DetailJob from './pages/DetailJob.js';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
 

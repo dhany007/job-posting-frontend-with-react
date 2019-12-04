@@ -48,7 +48,7 @@ export default class Login extends Component {
       password,
       name_user,
     }
-    axios.post('http://localhost:3001/auth/register',data, {"Content-Type": "application/x-www-form-urlencoded"})
+    axios.post('http://34.205.156.175:3001/auth/register',data, {"Content-Type": "application/x-www-form-urlencoded"})
     .then(response => {
       console.log(response.data.token)
       console.log('Registration res', response);

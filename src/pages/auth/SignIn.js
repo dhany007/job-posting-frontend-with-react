@@ -40,7 +40,7 @@ export default class Login extends Component {
     const data = {email, password}
     axios
       .post(
-        'http://localhost:3001/auth/login', data, {"Content-Type": "application/x-www-form-urlencoded"}
+        'http://34.205.156.175:3001/auth/login', data, {"Content-Type": "application/x-www-form-urlencoded"}
       )
       .then(response => {
         console.log('Res from login ', response);

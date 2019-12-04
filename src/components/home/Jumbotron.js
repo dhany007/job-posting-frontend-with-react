@@ -9,6 +9,9 @@ import jumboImage from '../../assets/jumboBackground2.png'
 const Styles = styled.div`
 .jumbo {
   background: url(${jumboImage}) no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
   color: #1f1f1e;
   height: 375px;

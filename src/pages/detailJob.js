@@ -24,7 +24,7 @@ export default class DetailJob extends Component {
   
   componentDidMount(){
     const {id_job} = this.props.match.params
-    axios.get('http://localhost:3001/job/'+id_job).then(res=>{
+    axios.get('http://34.205.156.175:3001/job/'+id_job).then(res=>{
       this.setState({
         data:res.data.result[0]
       })
