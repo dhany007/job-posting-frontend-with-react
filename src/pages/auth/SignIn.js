@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+
 import {
   Container, Button, Alert,
   Card, CardText, Form, FormGroup, Input,
@@ -12,16 +13,25 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faKey, faEnvelope, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faKey, faEnvelope, faSignInAlt, faUserPlus, faBullseye } from '@fortawesome/free-solid-svg-icons';
 
-export default class Login extends Component {
+import {connect} from 'react-redux';
+import {login} from './../../redux/action/user';
+
+class Login extends Component {
   constructor(props){
     super(props)
     this.state = {
       email: '',
       password: '',
-      logError:'',
-      isLogged:this.props.isLogged,
+      // logError:'',
+      // isLogged:this.props.isLogged,
+      isLogged: this.props.user.isLogged,
+      isLoading: false,
+      isError: false,
+      data : {},
+      message: '',
+      
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -33,21 +43,42 @@ export default class Login extends Component {
     })
   }
 
+  // handleSubmit = (event) => {
+  //   const { email, password } = this.state;
+  //   console.log(email)
+  //   console.log(password)
+  //   const data = {email, password}
+  //   axios
+  //     .post(
+  //       'http://34.205.156.175:3001/auth/login', data, {"Content-Type": "application/x-www-form-urlencoded"}
+  //     )
+  //     .then(response => {
+  //       console.log('Res from login ', response);
+  //       localStorage.setItem('token', response.data.token);
+  //       if(response.data.success === true){
+  //         this.props.handleLogged(response.data)
+  //         this.props.history.push('/')
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log('Login error ', err);
+  //     })
+  //   event.preventDefault();
+  // }
+
   handleSubmit = (event) => {
     const { email, password } = this.state;
-    console.log(email)
-    console.log(password)
     const data = {email, password}
-    axios
-      .post(
-        'http://34.205.156.175:3001/auth/login', data, {"Content-Type": "application/x-www-form-urlencoded"}
-      )
+    this.props.dispatch(login(data))
       .then(response => {
-        console.log('Res from login ', response);
-        localStorage.setItem('token', response.data.token);
-        if(response.data.success === true){
-          this.props.handleLogged(response.data)
+        console.log(response)
+        if(response.action.payload.data.success === true){
+          localStorage.setItem('token', response.action.payload.data.token);
           this.props.history.push('/')
+        } else {
+          this.setState({
+            message: response.action.payload.data.message
+          })
         }
       })
       .catch(err => {
@@ -56,14 +87,19 @@ export default class Login extends Component {
     event.preventDefault();
   }
 
+  logout =() => {
+    localStorage.removeItem('token')
+    this.setState({
+      isLogged: false,
+    })
+  }
   
   getToken = async (keyToken) => {
-    const resultToken = localStorage.getItem(keyToken)
-    console.log(resultToken);
+    const resultToken = await localStorage.getItem(keyToken)
     return resultToken;
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.getToken('token')
     .then(res => {
       if(res!==null){
@@ -80,15 +116,15 @@ export default class Login extends Component {
     return (
       <React.Fragment>    
       <Navigation isLogged={this.state.isLogged}/>
-      {this.state.isLogged&&(
+      {(this.state.isLogged)&&(
         <Container>
           <br/>
           <Alert color="danger">
-            You have logged in. Please <strong>sign out</strong> first.
+            You have logged in. Please <strong><Link onClick={()=>this.logout()}>sign out</Link></strong> first.
           </Alert>
         </Container>
       )}
-      {!this.state.isLogged &&
+      {(!this.state.isLogged) &&
       <Container>
         <br/>
         <Styled >
@@ -124,6 +160,7 @@ export default class Login extends Component {
               />
               </FormGroup><br/>
               <Button color='success' type='submit' block><span><FontAwesomeIcon icon={faSignInAlt}/>&nbsp;Sign in</span></Button><br/>
+              <CardText className='messageLogin'>{this.state.message}</CardText>
               <Link to='/'>Reset your password</Link><br/><hr/>
               <Link to='/signup' className='btn btn-primary btn-block '><span><FontAwesomeIcon icon={faUserPlus}/>&nbsp;Sign up New Account</span> </Link>{' '}
             </CardText>
@@ -141,6 +178,9 @@ export default class Login extends Component {
 }
 
 const Styled = styled.div`
+  .messageLogin {
+    color: #ff0000;
+  }
   .logForm {
     text-align: center;
     width: 450px;
@@ -162,3 +202,9 @@ const Styled = styled.div`
     width: 45px;
   }
 `;
+
+const mapStateProps = state => ({
+  user: state.user
+})
+
+export default connect(mapStateProps)(Login);

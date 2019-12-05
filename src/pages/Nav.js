@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import {connect} from 'react-redux';
+
 import {
   Collapse,
   Navbar,
@@ -16,7 +18,7 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogged: this.props.isLogged,
+      isLogged: this.props.user.isLogged,
       dropdownOpen: false
     };
     this.toggle = this.toggle.bind(this);
@@ -35,16 +37,14 @@ class Navigation extends Component {
   }
   
   getToken = async (keyToken) => {
-    const resultToken = localStorage.getItem(keyToken)
-    console.log(resultToken);
+    const resultToken = await localStorage.getItem(keyToken)
     return resultToken;
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.getToken('token')
     .then(res => {
       if(res!==null){
-      console.log('Masuk kesini kalau punya token')
       this.setState({
         isLogged: true
       })
@@ -71,7 +71,7 @@ class Navigation extends Component {
               {this.state.isLogged &&(
               <NavItem>
                 <NavLink>
-                  <Link  to='/signin' onClick={() => this.logout()} className='navBar'>Sign out</Link></NavLink>
+                  <Link to ='/' onClick={() => this.logout()} className='navBar'>Sign out</Link></NavLink>
               </NavItem> 
               )}
               {!this.state.isLogged &&(
@@ -94,10 +94,14 @@ class Navigation extends Component {
   }
 }
 
-export default Navigation;
-
 const NavigationBar = styled.div`
   .navBar {
     color: #1f1f1e;
   }
 `;
+
+const mapStateProps = state => ({
+  user: state.user
+})
+
+export default connect(mapStateProps)(Navigation);

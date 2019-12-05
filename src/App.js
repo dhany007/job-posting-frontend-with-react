@@ -6,12 +6,15 @@ import Job from './pages/Job';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import NoMatch from './pages/NoMatch';
-import Home from '../src/pages/Home';
+import Home from './pages/Home';
 import DetailJob from './pages/DetailJob';
 
 import Dashboard from './pages/admin/Job';
 import DashboardCompany from './pages/admin/Company';
 import DashboardCategory from './pages/admin/Category';
+
+import {Provider} from 'react-redux';
+import store from './redux/store';
 
 export default class App extends Component {
   constructor(){
@@ -37,6 +40,7 @@ export default class App extends Component {
     return (
       <React.Fragment>
           <Router>
+            <Provider store={store}>
               <Switch>
                 <Route
                 path = '/'
@@ -54,13 +58,14 @@ export default class App extends Component {
                 isLogged= {this.state.isLogged} />)}
                 exact />
 
-                <Route
+                {/* <Route
                 path = '/signin'
                 render = { props => (
                 <SignIn {...props}
                 handleLogged= {this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
-                exact />
+                exact /> */}
+                <Route path = '/signin' component = {SignIn}/>
 
                 <Route
                 path = '/signup'
@@ -102,6 +107,7 @@ export default class App extends Component {
                 <Route component = { NoMatch } />
               </Switch>
               <br/>
+            </Provider>
           </Router>
       </React.Fragment>
     )
