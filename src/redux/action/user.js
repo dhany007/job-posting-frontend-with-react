@@ -8,3 +8,11 @@ export const login = data => {
     payload: axios.post(`${IP}/auth/login`, data),
   }
 }
+
+export const register = data => {
+  return {
+    type: 'REGISTER_USER',
+    payload: axios.post(`${IP}/auth/register`, data),
+
+  }
+}

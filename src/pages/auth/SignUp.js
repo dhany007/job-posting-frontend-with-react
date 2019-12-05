@@ -14,15 +14,19 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faKey, faEnvelope, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
-export default class Login extends Component {
+import {connect} from 'react-redux';
+import {register} from './../../redux/action/user';
+
+class SignUp extends Component {
   constructor(props){
     super(props)
     this.state = {
       email: '',
       name_user: '',
       password: '',
-      logError:'',
-      isLogged: this.props.isLogged,
+      data: {},
+      isLogged: this.props.user.isLogged,
+      message: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -48,28 +52,30 @@ export default class Login extends Component {
       password,
       name_user,
     }
-    axios.post('http://34.205.156.175:3001/auth/register',data, {"Content-Type": "application/x-www-form-urlencoded"})
+   
+    this.props.dispatch(register(data))
     .then(response => {
-      console.log(response.data.token)
-      console.log('Registration res', response);
-      if(response.data.success === true) {
+      if(response.action.payload.data.success === true) {
         this.props.history.push('/signin')
+      } else {
+        this.setState({
+          message: response.action.payload.data.Message
+        })
       }
     })
     .catch(err => {
-      console.log('Registration error', err);
+      console.log('Registration error ', err);
     })
 
     event.preventDefault();
   }
 
   getToken = async (keyToken) => {
-    const resultToken = localStorage.getItem(keyToken)
-    console.log(resultToken);
+    const resultToken = await localStorage.getItem(keyToken)
     return resultToken;
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.getToken('token')
     .then(res => {
       if(res!==null){
@@ -139,7 +145,8 @@ export default class Login extends Component {
                     required
                   />
                 </FormGroup><br/>
-                <Button color='success' type='submit' block><span><FontAwesomeIcon icon={faSignInAlt}/>&nbsp;Create Account</span></Button><br/>      
+                <Button color='success' type='submit' block><span><FontAwesomeIcon icon={faSignInAlt}/>&nbsp;Create Account</span></Button><br/> 
+                <CardText className='messageReg'>{this.state.message}</CardText>     
               <CardText>Have an account? <Link to='/signin'>sign in</Link></CardText><br/>
               </CardText>
             </Form>
@@ -148,13 +155,16 @@ export default class Login extends Component {
           </Styled>
         </Container>
       } 
-        <Footer/>  
+      <Footer/>  
       </React.Fragment>  
         
     )
   }
 }
 const Styled = styled.div`
+  .messageReg {
+    color: #ff0000;
+  }
   .logForm {
     text-align: center;
     width: 450px;
@@ -176,3 +186,9 @@ const Styled = styled.div`
     width: 45px;
   }
 `;
+
+const mapStateProps = state => ({
+  user: state.user
+})
+
+export default connect(mapStateProps)(SignUp);

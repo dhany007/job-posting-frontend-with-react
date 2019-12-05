@@ -125,51 +125,51 @@ class Login extends Component {
         </Container>
       )}
       {(!this.state.isLogged) &&
-      <Container>
-        <br/>
-        <Styled >
-        <Card className='logForm'>
-          <Form className='allCard' onSubmit={this.handleSubmit}><br/>
-            <CardText className='h3'>Sign in</CardText> <br/>
-            <Link to='#' className='btn btn-primary'><span><FontAwesomeIcon icon={faImage}/>&nbsp; Sign in with Facebook</span> </Link>{' '}
-            <Link to='#' className='btn btn-danger'><span><FontAwesomeIcon icon={faImage}/> &nbsp; Sign in with Google+</span> </Link> <br/><br/>
-            <CardText>OR</CardText>
-            <CardText className='inputData'>
-              <FormGroup className="mb-2 mb-sm-0 inputForm" >
-                <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faEnvelope}/></span>
-                <Input 
-                  type="email" 
-                  name="email" 
-                  placeholder="Email"
+        <Container>
+          <br/>
+          <Styled >
+          <Card className='logForm'>
+            <Form className='allCard' onSubmit={this.handleSubmit}><br/>
+              <CardText className='h3'>Sign in</CardText> <br/>
+              <Link to='#' className='btn btn-primary'><span><FontAwesomeIcon icon={faImage}/>&nbsp; Sign in with Facebook</span> </Link>{' '}
+              <Link to='#' className='btn btn-danger'><span><FontAwesomeIcon icon={faImage}/> &nbsp; Sign in with Google+</span> </Link> <br/><br/>
+              <CardText>OR</CardText>
+              <CardText className='inputData'>
+                <FormGroup className="mb-2 mb-sm-0 inputForm" >
+                  <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faEnvelope}/></span>
+                  <Input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Email"
+                    className='inputFil'
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup className="mb-2 mb-sm-0 inputForm" >
+                  <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faKey}/></span>
+                  <Input 
+                  type="password" 
+                  name="password" 
+                  placeholder="Password"
                   className='inputFil'
-                  value={this.state.email}
+                  value={this.state.password}
                   onChange={this.handleChange}
                   required
                 />
-              </FormGroup>
-              <FormGroup className="mb-2 mb-sm-0 inputForm" >
-                <span className='input-group-prepend input-group-text iconIn'><FontAwesomeIcon icon={faKey}/></span>
-                <Input 
-                type="password" 
-                name="password" 
-                placeholder="Password"
-                className='inputFil'
-                value={this.state.password}
-                onChange={this.handleChange}
-                required
-              />
-              </FormGroup><br/>
-              <Button color='success' type='submit' block><span><FontAwesomeIcon icon={faSignInAlt}/>&nbsp;Sign in</span></Button><br/>
-              <CardText className='messageLogin'>{this.state.message}</CardText>
-              <Link to='/'>Reset your password</Link><br/><hr/>
-              <Link to='/signup' className='btn btn-primary btn-block '><span><FontAwesomeIcon icon={faUserPlus}/>&nbsp;Sign up New Account</span> </Link>{' '}
-            </CardText>
-          </Form><br/>
-        </Card>
-        <br/>
-        </Styled>
-      </Container>
-      }
+                </FormGroup><br/>
+                <Button color='success' type='submit' block><span><FontAwesomeIcon icon={faSignInAlt}/>&nbsp;Sign in</span></Button><br/>
+                <CardText className='messageLogin'>{this.state.message}</CardText>
+                <Link to='/'>Reset your password</Link><br/><hr/>
+                <Link to='/signup' className='btn btn-primary btn-block '><span><FontAwesomeIcon icon={faUserPlus}/>&nbsp;Sign up New Account</span> </Link>{' '}
+              </CardText>
+            </Form><br/>
+          </Card>
+          <br/>
+          </Styled>
+        </Container>
+        }
       <Footer />
       </React.Fragment>
     
