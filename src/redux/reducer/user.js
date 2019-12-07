@@ -44,7 +44,6 @@ const user = (state = initalState, action) => {
         isLoading: true,
       };
     case REGISTER_USER_FULFILLED:
-      console.log(action.payload.data.data)
       return {
         ...state,
         isLoading: false,

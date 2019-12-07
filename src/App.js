@@ -50,13 +50,15 @@ export default class App extends Component {
                 isLogged= {this.state.isLogged} />)}
                 exact />
 
-                <Route
+                {/* <Route
                 path = '/job'
                 render = { props => (
                 <Job {...props}
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
-                exact />
+                exact /> */}
+
+                <Route path = '/job' component = {Job} />
 
                 {/* <Route
                 path = '/signin'

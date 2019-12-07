@@ -16,42 +16,46 @@ import {
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-export default class Job extends Component {
+import {connect} from 'react-redux';
+import {getJob} from './../redux/action/job';
+
+class Job extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      data:{},
-      prev:'',
-      next:'',
-      searchNameJob:'',
-      searchNameCompany:'',
-      isLoading:true,
-      message:'',
-      sortBy:'date_updated',
+      data: {},
+      prev: '',
+      next: '',
+      searchNameJob: '%%',
+      searchNameCompany: '%%',
+      isLoading: true,
+      message: '',
+      sortBy: 'date_updated',
     }
   }
   
   componentDidMount(){
-    this.getData().then(data=>{
+    this.getData()
+  }
+
+  getData = async()=>{
+    const query = this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany;
+    // const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
+    this.props.dispatch(getJob(query)).then(res => {
+      console.log(res.action.payload.data)
       this.setState({
-        data,
-        prev: data.info.prev,
-        next: data.info.next,
+        data: res.action.payload.data,
+        prev: res.action.payload.data.info.prev,
+        next: res.action.payload.data.info.next,
         isLoading: false,
       })
     })
   }
 
-  getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
-    
-    return job.data
-  }
-
-  buttonPress = async(page)=>{
+  buttonPress = async()=>{
     this.setState({isLoading:true})
-    this.getData(page).then(data=>{
+    this.getData().then(data=>{
       this.setState({
         data,
         next: data.info.next,
@@ -97,7 +101,6 @@ export default class Job extends Component {
     this.setState({
       sortBy
     })
-    console.log(sortBy)
     this.getData()
       .then(data => {
         this.setState({data,
@@ -128,7 +131,6 @@ export default class Job extends Component {
                   <Col md={5}>
                     <FormGroup>
                       <Input type="text" onChange={this.handleOnInputChangeName} id="searchName" placeholder="Search new oppurtunities" className='searchBar'/>
-                      {console.log(this.state.searchNameJob)}
                     </FormGroup>
                   </Col>
                   <Col md={5}>
@@ -162,7 +164,7 @@ export default class Job extends Component {
               {this.state.data.result.map((v,i)=>(
                 
                 <Row sm={{size:'auto'}} key={i.toString()} className='shadow p-3 mb-5 bg-white rounded rowBody'>
-                  <Card body id={'toggler' + v.id_job.toString()}>
+                  <Card body id={'toggler' + v.id_job.toString()} className='myCard'>
                     <CardTitle className='cardBody'>
                       <Row>
                         <Col md='1'>
@@ -224,6 +226,9 @@ export default class Job extends Component {
 }
 
 const Styled = styled.div`
+  .myCard {
+    margin-bottom: 0;
+  }
   .rowBody {
     margin:0;
   }
@@ -306,3 +311,9 @@ const Styled = styled.div`
     heigth: 100px;
   }
 `;
+
+const mapStateProps = state => ({
+  job: state.job
+})
+
+export default connect(mapStateProps)(Job);
