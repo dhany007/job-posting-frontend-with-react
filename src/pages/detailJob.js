@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 
-import Navigation from '../pages/Nav';
-import Footer from '../pages/Footer';
+import Navigation from './Nav';
+import Footer from './Footer';
 
 import {
-  Row, Col, Container, Card
+  Row, Col, Container, Card, Spinner,
 } from 'reactstrap'
 
 
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+import {connect} from 'react-redux';
+import {getOneJob} from '../redux/action/job';
 
-export default class DetailJob extends Component {
+class DetailJob extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -23,25 +24,32 @@ export default class DetailJob extends Component {
   }
   
   componentDidMount(){
-    const {id_job} = this.props.match.params
-    axios.get('http://34.205.156.175:3001/job/'+id_job).then(res=>{
+    this.getOneData(this.state.id_job);
+  }
+
+  getOneData = async(id_job)=>{
+    console.log(this.state.id_job)
+    this.props.dispatch(getOneJob(id_job)).then(res=>{
+      console.log(res.action.payload.result)
       this.setState({
-        data:res.data.result[0]
+        data:res.action.payload.data.result,
       })
     })
   }
+
 
   render() {
     return (
       <React.Fragment>
       <Navigation isLogged={this.props.isLogged}/>
       <Styled> 
-        <Container><br/><br/><br/>
+        <Container><br/><br/>
         {!this.state.data.id_job&&(
           <React.Fragment>
-            Loading...
+            <Spinner style={{ width: '3rem', height: '3rem'}} />
           </React.Fragment>
-        )}
+          
+        )}<br/>
         {this.state.data.id_job&&(
           <React.Fragment>
             <Card className='cardDetail'>
@@ -104,3 +112,9 @@ const Styled = styled.div`
   position: sticky;
 }
 `;
+
+const mapStateProps = state => ({
+  job: state.job
+})
+
+export default connect(mapStateProps)(DetailJob);

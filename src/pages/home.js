@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import Jumbotron from '../components/home/Jumbotron'
 import CardHome from '../components/home/CardHome'
 
-import Navigation from '../pages/Nav';
-import Footer from '../pages/Footer';
+import Navigation from './Nav';
+import Footer from './Footer';
 
 export default class Home extends Component {
   constructor(props){

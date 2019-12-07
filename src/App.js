@@ -6,8 +6,8 @@ import Job from './pages/Job';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import NoMatch from './pages/NoMatch';
-import Home from '../src/pages/Home';
-import DetailJob from '../src/pages/DetailJob';
+import Home from './pages/home';
+import DetailJob from './pages/detailJob';
 
 import Dashboard from './pages/admin/Job';
 import DashboardCompany from './pages/admin/Company';
@@ -76,14 +76,16 @@ export default class App extends Component {
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
                 exact />
-                
+{/*                 
                 <Route
                 path = '/detail/:id_job' 
                 render = { props => (
                 <DetailJob {...props}
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
-                />
+                /> */}
+
+                <Route path = '/detail/:id_job' component={DetailJob} />
 
                 <Route path = '/dashboard'
                 render = { props => (
