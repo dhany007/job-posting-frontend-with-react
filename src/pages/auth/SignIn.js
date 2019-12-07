@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 
 import {
   Container, Button, Alert,
@@ -13,7 +12,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faKey, faEnvelope, faSignInAlt, faUserPlus, faBullseye } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faKey, faEnvelope, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 import {connect} from 'react-redux';
 import {login} from './../../redux/action/user';

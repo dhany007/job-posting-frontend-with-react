@@ -1,7 +1,6 @@
 /* eslint-disable react/no-direct-mutation-state */
 /* eslint-disable no-undef */
 import React, { Component } from 'react'
-import axios from 'axios'
 
 
 import Navigation from '../pages/Nav';

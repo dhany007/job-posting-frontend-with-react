@@ -7,7 +7,7 @@ import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
-import DetailJob from './pages/DetailJob';
+import DetailJob from '../src/pages/DetailJob';
 
 import Dashboard from './pages/admin/Job';
 import DashboardCompany from './pages/admin/Company';
