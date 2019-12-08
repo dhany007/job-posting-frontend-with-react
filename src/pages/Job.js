@@ -24,6 +24,7 @@ class Job extends Component {
     super(props)
     this.state = {
       data: {},
+      info: {},
       prev: '',
       next: '',
       searchNameJob: '%%',
@@ -42,9 +43,11 @@ class Job extends Component {
     const query = this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany;
     // const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
     this.props.dispatch(getJob(query)).then(res => {
-      console.log(res.action.payload.data)
+      console.log(res.action.payload.data.result);
+      console.log(res.action.payload.data.info);
       this.setState({
-        data: res.action.payload.data,
+        data: res.action.payload.data.result,
+        info: res.action.payload.data.info,
         prev: res.action.payload.data.info.prev,
         next: res.action.payload.data.info.next,
         isLoading: false,
@@ -146,7 +149,7 @@ class Job extends Component {
               </Form>
               <Row className='rowBody'>
                 <ul className='getCount'>
-                  <li className='lblSort'>Get {this.state.data.info.totalData} results</li>
+                  <li className='lblSort'>Get {this.state.info.totalData} results</li>
                 </ul>
                 <ul className='getSort'>
                   <li className='lblSort'>Sortby</li>
@@ -160,7 +163,7 @@ class Job extends Component {
                 </ul>
                 
               </Row>
-              {this.state.data.result.map((v,i)=>(
+              {this.state.data.map((v,i)=>(
                 
                 <Row sm={{size:'auto'}} key={i.toString()} className='shadow p-3 mb-5 bg-white rounded rowBody'>
                   <Card body id={'toggler' + v.id_job.toString()} className='myCard'>

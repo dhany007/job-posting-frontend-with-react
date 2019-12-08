@@ -15,21 +15,24 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import {connect} from 'react-redux';
+import {getCompany} from './../../redux/action/company';
 
-export default class ContentCompany extends Component {
+class ContentCompany extends Component {
   constructor(props) {
     super(props)
     this.state = {
       name_company: '',
       logo: '',
       description_company: '',
+      data: {},
+      info: {},
 
 
       modalAdd: false,
       modalUpdate: false,
-      data:{},
-      isLoading:true,
     }
+
     this.toggleAdd = this.toggleAdd.bind(this);
     this.getData = this.getData.bind(this);
     this.handleSubmitAdd = this.handleSubmitAdd.bind(this)
@@ -39,18 +42,12 @@ export default class ContentCompany extends Component {
   }
 
   componentDidMount(){
-    this.getData().then(data=>{
-      this.setState({
-        data,
-        isLoading: false,
-      })
-    })
+    this.getData()
   }
 
-  // Get all category
-  getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/company');
-    return job.data
+  // Get all Company
+  getData = async()=>{
+    await this.props.dispatch(getCompany())
   }
 
   //get token
@@ -173,6 +170,7 @@ export default class ContentCompany extends Component {
   }
 
   render() {
+    // console.log(this.props.company.data)
     return (
       <div className="content-wrapper">
       {/* Content Header (Page header) */}
@@ -195,7 +193,7 @@ export default class ContentCompany extends Component {
       <section className="content">
         <div className="container-fluid">
         <Row className='justify-content-md-center rowBody'>
-            {this.state.isLoading&&(
+            {this.props.company.isLoading&&(
               <Spinner style={{ width: '3rem', height: '3rem' }} />
             )}
         </Row>
@@ -262,9 +260,9 @@ export default class ContentCompany extends Component {
                   <th>Action</th>
                 </tr>
               </thead>
-                  {!this.state.isLoading&&
+                  {!this.props.company.isLoading&&!this.props.company.isError&&
                 <React.Fragment>
-                  {this.state.data.result.map((v,i)=>(
+                  {this.props.company.data.map((v,i)=>(
                   
               <tbody >
                 <tr key={i.toString()} >
@@ -347,6 +345,7 @@ export default class ContentCompany extends Component {
                       <span><FontAwesomeIcon icon={faTrash}/></span>
                     </button>
 
+                    {/* Modal Delete */}
                     <div className="modal fade" id={'aaa'+v.id_company} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -407,3 +406,9 @@ const Styled = styled.div`
 
   }
 `;
+
+const mapStateProps = state => ({
+  company: state.company
+})
+
+export default connect(mapStateProps)(ContentCompany);

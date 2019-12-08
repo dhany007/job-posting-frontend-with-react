@@ -71,7 +71,7 @@ class Navigation extends Component {
               {this.state.isLogged &&(
               <NavItem>
                 <NavLink>
-                  <Link to ='/' onClick={() => this.logout()} className='navBar'>Sign out</Link></NavLink>
+                  <Link to ='/signin' onClick={() => this.logout()} className='navBar'>Sign out</Link></NavLink>
               </NavItem> 
               )}
               {!this.state.isLogged &&(

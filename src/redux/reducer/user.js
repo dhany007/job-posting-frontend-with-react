@@ -59,7 +59,7 @@ const user = (state = initalState, action) => {
 
     default:
       return {
-        state,
+        ...state,
       }
   }
 }

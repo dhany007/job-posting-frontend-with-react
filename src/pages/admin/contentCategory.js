@@ -15,15 +15,16 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import {connect} from 'react-redux';
+import {getCategory} from './../../redux/action/category';
 
-export default class ContentCategory extends Component {
+class ContentCategory extends Component {
   constructor(props) {
     super(props)
     this.state = {
       name_category: '',
 
       data:{},
-      isLoading:true,
       modalAdd: false,
       modalUpdate: false,
       modalDelete: false,
@@ -39,12 +40,7 @@ export default class ContentCategory extends Component {
   }
 
   componentDidMount(){
-    this.getData().then(data=>{
-      this.setState({
-        data,
-        isLoading: false,
-      })
-    })
+    this.getData();
   }
 
   toggleAdd = () =>{
@@ -54,9 +50,8 @@ export default class ContentCategory extends Component {
   }
 
   // Get all category
-  getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/category')
-    return job.data
+  getData = async()=>{
+    await this.props.dispatch(getCategory())
   }
 
   //get token
@@ -101,7 +96,6 @@ export default class ContentCategory extends Component {
       console.log(err)
     })
   }
-
 
   //delete category
   handleSubmitDelete = (id) => {
@@ -153,6 +147,7 @@ export default class ContentCategory extends Component {
   }
 
   render() {
+    console.log(this.props.category.data)
     return (
       <div className="content-wrapper">
       {/* Content Header (Page header) */}
@@ -175,7 +170,7 @@ export default class ContentCategory extends Component {
       <section className="content">
         <div className="container-fluid">
           <Row className='justify-content-md-center rowBody'>
-            {this.state.isLoading&&(
+            {this.props.category.isLoading&&(
               <Spinner style={{ width: '3rem', height: '3rem' }} />
             )}
           </Row>
@@ -213,9 +208,9 @@ export default class ContentCategory extends Component {
                       <th>Action</th>
                     </tr>
                   </thead>
-                  {!this.state.isLoading&&
+                  {!this.props.category.isLoading&&!this.props.category.isError&&
                 <React.Fragment>
-                  {this.state.data.result.map((v,i)=>(
+                  {this.props.category.data.result.map((v,i)=>(
                   <tbody >
                     <tr key={i.toString()} >
                       <th scope='row' className='align-middle'>{v.id_category}</th>
@@ -226,7 +221,8 @@ export default class ContentCategory extends Component {
                         <button type="button" className="btn btn-warning" data-toggle="modal" data-target= {'#bbb'+v.id_category}>
                           <span><FontAwesomeIcon icon={faEdit}/></span> 
                         </button>&nbsp;&nbsp;
-
+                        
+                        {/* Update category */}
                         <div className="modal fade" id={'bbb'+v.id_category} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div className="modal-dialog" role="document">
                             <div className="modal-content">
@@ -260,12 +256,12 @@ export default class ContentCategory extends Component {
                           </div>
                         </div>
                       
-
                         {/* Delete item  */}
                         <button type="button" className="btn btn-danger" data-toggle="modal" data-target= {'#aaa'+v.id_category}>
                           <span><FontAwesomeIcon icon={faTrash}/></span>
                         </button>
 
+                        {/* delete category */}
                         <div className="modal fade" id={'aaa'+v.id_category} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div className="modal-dialog" role="document">
                             <div className="modal-content">
@@ -317,3 +313,9 @@ const Styled = styled.div`
     margin-bottom: 0;
   }
 `;
+
+const mapStateProps = state => ({
+  category: state.category
+})
+
+export default connect(mapStateProps)(ContentCategory);
