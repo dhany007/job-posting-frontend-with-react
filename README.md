@@ -39,7 +39,7 @@ $ yarn start # start app
 
 - [x] User Login:
 
-![login]/src/assets/signin.png)
+![login](/src/assets/signin.png)
 
 - [x] AdminPage:
 
