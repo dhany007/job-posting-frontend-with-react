@@ -18,7 +18,6 @@ export default class Job extends Component {
   }
   getToken = async (keyToken) => {
     const resultToken = localStorage.getItem(keyToken)
-    console.log(resultToken);
     return resultToken;
   }
 
@@ -26,7 +25,6 @@ export default class Job extends Component {
     this.getToken('token')
     .then(res => {
       if(res!==null){
-      console.log('Masuk kesini kalau punya token')
       this.setState({
         isLogged: true
       })

@@ -29,16 +29,17 @@ class DetailJob extends Component {
 
   getOneData = async(id_job)=>{
     console.log(this.state.id_job)
-    this.props.dispatch(getOneJob(id_job)).then(res=>{
-      console.log(res.action.payload.result)
+    await this.props.dispatch(getOneJob(id_job)).then(res=>{
+      console.log(res.action.payload.data.result[0])
       this.setState({
-        data:res.action.payload.data.result,
+        data:res.action.payload.data.result[0],
       })
     })
   }
 
 
   render() {
+    console.log(this.state.data)
     return (
       <React.Fragment>
       <Navigation isLogged={this.props.isLogged}/>
@@ -72,7 +73,7 @@ class DetailJob extends Component {
             </Row>
             <hr/>
             <Row>
-              <p><strong>DESCRIPTION JOB</strong> <br/>{this.state.data.description_job}</p>
+              <p className='descJob'><strong>DESCRIPTION JOB</strong> <br/>{this.state.data.description_job}</p>
             </Row>
             </Card>
           </React.Fragment>
@@ -88,6 +89,9 @@ class DetailJob extends Component {
 }
 
 const Styled = styled.div`
+.descJob {
+  text-align: justify
+}
 .contLogo {
   align-self: center
 }

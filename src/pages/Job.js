@@ -1,7 +1,7 @@
 /* eslint-disable react/no-direct-mutation-state */
 /* eslint-disable no-undef */
 import React, { Component } from 'react'
-
+import axios from 'axios'
 
 import Navigation from '../pages/Nav';
 import Footer from '../pages/Footer';
@@ -37,14 +37,12 @@ class Job extends Component {
   
   componentDidMount(){
     this.getData()
+    this.getDataExample()
   }
 
   getData = async()=>{
     const query = this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany;
-    // const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
     this.props.dispatch(getJob(query)).then(res => {
-      console.log(res.action.payload.data.result);
-      console.log(res.action.payload.data.info);
       this.setState({
         data: res.action.payload.data.result,
         info: res.action.payload.data.info,
@@ -55,11 +53,17 @@ class Job extends Component {
     })
   }
 
-  buttonPress = async()=>{
+  getDataExample = async(page)=>{
+    const job = await axios.get(page!==undefined?page:'https://freejobpost.site?'+this.state.sortBy+'=DESC&&searchNameJob='+ this.state.searchNameJob+'&&searchNameCompany='+this.state.searchNameCompany)
+    
+    return job.data
+  }
+
+  buttonPress = async(page)=>{
     this.setState({isLoading:true})
-    this.getData().then(data=>{
+    this.getDataExample(page).then(data=>{
       this.setState({
-        data,
+        data: data.result,
         next: data.info.next,
         prev: data.info.prev,
         isLoading: false

@@ -13,10 +13,10 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faPlus, faBullseye } from '@fortawesome/free-solid-svg-icons';
 
 import {connect} from 'react-redux';
-import {getCompany} from './../../redux/action/company';
+import {getCompany, addCompany} from './../../redux/action/company';
 
 class ContentCompany extends Component {
   constructor(props) {
@@ -56,6 +56,12 @@ class ContentCompany extends Component {
     return token
   }
 
+  //add Company
+  addCompany = async(data, token)=>{
+    await this.props.dispatch(addCompany(data, token))
+  }
+
+  
   toggleAdd = () =>{
     this.setState(prevState => ({
       modalAdd: !prevState.modalAdd,
@@ -67,8 +73,9 @@ class ContentCompany extends Component {
     event.preventDefault()
     this.setState({
       name_company: event.target.value,
-
+      
     })
+    console.log(this.state.name_company)
   }
   handleDecChange = (event) => {
     event.preventDefault()
@@ -76,6 +83,7 @@ class ContentCompany extends Component {
       description_company: event.target.value,
 
     })
+    console.log(this.state.description_company)
   }
   handleLogoChange = (event) => {
     event.preventDefault()
@@ -92,23 +100,10 @@ class ContentCompany extends Component {
     formData.append('name_company', event.target.name_company.value)
     formData.append('description_company', event.target.description_company.value)
     formData.append('logo', event.target.logo.files[0])
-
-
-    axios({
-      method: 'POST',
-      url: 'http://34.205.156.175:3001/company/',
-      data: formData,
-      headers : {
-        'content-Type': 'application/x-www-form-urlencoded',
-        'x-access-token': this.getToken(),
-      }
-    })
+    console.log(formData)
+    this.addCompany(formData, this.getToken())
     .then(res => {
-      this.getData().then(data=>{
-        this.setState({
-          data,
-        })
-      })
+      this.getData()
     })
     .catch(err => {
       console.log(err)
@@ -151,7 +146,7 @@ class ContentCompany extends Component {
   handleSubmitDelete = (id) => {
     axios({
       method: 'DELETE',
-      url: 'http://34.205.156.175:3001/company/'+id,
+      url: 'https://freejobpost.site/company/'+id,
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
         'x-access-token': this.getToken(),
@@ -170,7 +165,8 @@ class ContentCompany extends Component {
   }
 
   render() {
-    // console.log(this.props.company.data)
+    console.log('masuk kesini bg ')
+    console.log(this.state.data)
     return (
       <div className="content-wrapper">
       {/* Content Header (Page header) */}
@@ -178,7 +174,7 @@ class ContentCompany extends Component {
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1>Job</h1>
+              <h1>Company</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
@@ -271,9 +267,12 @@ class ContentCompany extends Component {
                   </td>
                   <td className='align-middle'>{v.id_company}</td>
                   <td className='align-middle'>{v.name_company}</td>
-                  <td className='align-middle'>{v.description_company}</td>
+                  <td className='align-middle'>{v.description_company.substr(0,50)}...</td>
                   <td className='actionCompany'>
-                  
+                    {/* View Company */}
+                    <button type="button" className="btn btn-primary" >
+                      <span><FontAwesomeIcon icon={faBullseye}/></span> 
+                    </button>&nbsp;&nbsp;
                   {/* Updated Company */}
                     <button type="button" className="btn btn-warning" data-toggle="modal" data-target= {'#bbb'+v.id_company}>
                       <span><FontAwesomeIcon icon={faEdit}/></span> 

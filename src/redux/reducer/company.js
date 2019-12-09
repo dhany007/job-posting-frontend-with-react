@@ -49,13 +49,24 @@ const company = (state = initialState, action) => {
     
     // Add Job
     case ADD_COMPANY_PENDING:
-      return null;
+      return {
+        ...state,
+        isLoading: true,
+      };
 
     case ADD_COMPANY_FULFILLED:
-      return null;
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: [...state.data, action.payload.data.result]
+      };
       
     case ADD_COMPANY_REJECTED:
-        return null;
+        return {
+          isLoading: false,
+          isError: true,
+        };
     
     // Update Job
     case UPDATE_COMPANY_PENDING:

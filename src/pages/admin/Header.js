@@ -40,7 +40,7 @@ export default class Header extends Component {
               <NavLink> 
                 <Link to='#'>
                   <i className="far fa-comments" />
-                  <span className="badge badge-danger navbar-badge">3</span>
+                  <span className="badge badge-danger navbar-badge">0</span>
                 </Link>
               </NavLink>
             </NavItem>
@@ -49,7 +49,7 @@ export default class Header extends Component {
               <NavLink> 
                 <Link to='#'>
                   <i className="far fa-bell" />
-                  <span className="badge badge-warning navbar-badge">15</span>
+                  <span className="badge badge-warning navbar-badge">0</span>
                 </Link>
               </NavLink>
             </NavItem>

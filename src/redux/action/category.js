@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const IP = 'http://34.205.156.175:3001/category/';
+const IP = 'https://freejobpost.site/category/';
 
 export const getCategory = ()  => {
   return {

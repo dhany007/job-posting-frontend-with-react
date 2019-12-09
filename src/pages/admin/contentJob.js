@@ -13,19 +13,25 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faPlus, faBullseye } from '@fortawesome/free-solid-svg-icons';
 
-export default class ContentJob extends Component {
+import {connect} from 'react-redux';
+import {getJob} from './../../redux/action/job';
+import {getCategory} from './../../redux/action/category';
+import {getCompany} from './../../redux/action/company';
+
+class ContentJob extends Component {
   constructor(props) {
     super(props)
     this.state = {
       modalAdd: false,
       modalUpdate: false,
       modalDelete: false,
+
       data:{},
       prev:'',
       next:'',
-      isLoading:true,
+
       isLogin: true,
 
       name_job : '',
@@ -34,8 +40,8 @@ export default class ContentJob extends Component {
       salary : '',
       location_job : '',
       company : '',
-
-
+      dataCompany: [],
+      dataCategory: [],
     }
     this.toggleAdd = this.toggleAdd.bind(this);
     this.toggleUpdate = this.toggleUpdate.bind(this);
@@ -44,22 +50,33 @@ export default class ContentJob extends Component {
   }
 
   componentDidMount(){
-    this.getData().then(data=>{
-      this.setState({
-        data,
-        isLoading: false,
-        prev: data.info.prev,
-        next: data.info.next,
+    this.getData()
+    this.getCategory()
+    this.getCompany()
+  }
+
+  getData = async()=>{
+    await this.props.dispatch(getJob())
+  }
+
+  // get company
+  getCompany = async()=>{
+    await this.props.dispatch(getCompany()).then(item => {
+      this.setState ({
+        dataCompany: item.action.payload.data.result,
       })
     })
   }
 
-  getData = async(page)=>{
-    const job = await axios.get(page!==undefined?page:'http://34.205.156.175:3001/job')
-    return job.data
+  // get category
+  getCategory = async()=>{
+    await this.props.dispatch(getCategory()).then(item => {
+      this.setState ({
+        dataCategory: item.action.payload.data.result,
+      })
+    })
   }
 
-  
   buttonPress = async(page)=>{
     this.setState({isLoading:true})
     this.getData(page).then(data=>{
@@ -71,7 +88,6 @@ export default class ContentJob extends Component {
       })
     })
   }
-
 
   toggleAdd = () => {
     this.setState(prevState => ({
@@ -103,7 +119,6 @@ export default class ContentJob extends Component {
   //get token
   getToken =  () => {
     const resultToken = localStorage.getItem('token')
-    console.log(resultToken);
     return resultToken;
   }
 
@@ -119,11 +134,9 @@ export default class ContentJob extends Component {
       location_job : this.state.location_job,
       company : this.state.company
     };
-    console.log(data)
-
     axios({
       method: 'POST',
-      url: 'http://34.205.156.175:3001/job',
+      url: 'https://freejobpost.site/job',
       data: qs.stringify(data),
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
@@ -146,7 +159,7 @@ export default class ContentJob extends Component {
   handleSubmitDelete = (id) => {
     axios({
       method: 'DELETE',
-      url: 'http://34.205.156.175:3001/job'+id,
+      url: 'https://freejobpost.site/job/'+id,
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
         'x-access-token': this.getToken(),
@@ -177,7 +190,7 @@ export default class ContentJob extends Component {
     console.log(data)
     axios({
       method: 'PATCH',
-      url: 'http://34.205.156.175:3001/job'+id,
+      url: 'https://freejobpost.site/job'+id,
       data: qs.stringify(data),
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
@@ -196,6 +209,8 @@ export default class ContentJob extends Component {
     })
   }
   render() {
+    console.log('category')
+    console.log(this.state.dataCategory)
     return (
       <div className="content-wrapper">
       {/* Content Header (Page header) */}
@@ -218,7 +233,7 @@ export default class ContentJob extends Component {
       <section className="content">
         <div className="container-fluid">
           <Row className='justify-content-md-center rowBody'>
-            {this.state.isLoading&&(
+            {this.props.job.isLoading&&(
               <Spinner style={{ width: '3rem', height: '3rem' }} />
             )}
           </Row>
@@ -252,14 +267,17 @@ export default class ContentJob extends Component {
                         </Col>
                       </FormGroup>
                       <FormGroup row>
-                        <Label sm={2}>Category</Label>
+                        <Label sm={2} for="id_category">Category</Label>
                         <Col sm={10}>
-                          <Input
-                            type='number'
-                            name='category'
-                            onChange={this.handleChange}
-                            placeholder='Enter category (update soon)'/>
-                        </Col>
+                        <Input type="select" name="category" id="id_category" onChange={this.handleChange}>
+                        <option>Select Category</option>  
+                        {console.log('tes')}
+                        {console.log(this.state.dataCategory)}
+                        {this.state.dataCategory.map( (item,index) =>
+                          <option key={index.toString()} value={item.id_category}>{item.name_category}{console.log(item.name_category)}</option>
+                          
+                        )}
+                        </Input></Col>
                       </FormGroup>
                       <FormGroup row>
                         <Label sm={2}>Salary</Label>
@@ -282,14 +300,17 @@ export default class ContentJob extends Component {
                         </Col>
                       </FormGroup>
                       <FormGroup row>
-                        <Label sm={2}>Company</Label>
+                        <Label sm={2} for="id_company">Company</Label>
                         <Col sm={10}>
-                          <Input
-                            type='number'
-                            name='company'
-                            onChange={this.handleChange}
-                            placeholder='Enter company (update soon)'/>
-                        </Col>
+                        <Input type="select" name="company" id="id_company" onChange={this.handleChange}>
+                        <option>Select Company</option>  
+                        {console.log('tes')}
+                        {console.log(this.state.dataCompany)}
+                        {this.state.dataCompany.map( (item,index) =>
+                          <option key={index.toString()} value={item.id_company}>{item.name_company}{console.log(item.name_company)}</option>
+                          
+                        )}
+                        </Input></Col>
                       </FormGroup>
                   </ModalBody>
                   <ModalFooter>
@@ -312,9 +333,9 @@ export default class ContentJob extends Component {
                   <th>Action</th>
                 </tr>
               </thead>
-          {!this.state.isLoading&&
-          <React.Fragment>
-            {this.state.data.result.map((v,i)=>(
+              {!this.props.job.isLoading&&!this.props.job.isError&&
+                <React.Fragment>
+              {this.props.job.data.map((v,i)=>(
               <tbody >
                 <tr key={i.toString()}>
                   <th scope='row' className='align-middle'>{v.id_job}</th>
@@ -326,11 +347,17 @@ export default class ContentJob extends Component {
                   <td className='align-middle'>{v.date_update.toLocaleString().replace(/T/, ' ').replace(/\..+/, '')}</td>
                   <td className='actionJob'>
                     
+                    {/* View Job */}
+                    <button type="button" className="btn btn-primary">
+                      <span><FontAwesomeIcon icon={faBullseye}/></span>
+                    </button>&nbsp;&nbsp;
+
                     {/* Update Job */}
                     <button type="button" className="btn btn-warning" data-toggle="modal" data-target= {'#bbb'+v.id_job}>
                       <span><FontAwesomeIcon icon={faEdit}/></span>
                     </button>&nbsp;&nbsp;
-                    
+
+                    {/* Update Job */}
                     <div className="modal fade" id={'bbb'+v.id_job} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
@@ -417,6 +444,7 @@ export default class ContentJob extends Component {
                         </div>
                       </div>
                     </div>
+                    
                     {/* Modal Update Job */}
                     {/* <Modal isOpen={this.state.modalUpdate} toggle={this.toggleUpdate} className='modal-lg'>
                       <ModalHeader toggle={this.toggleUpdate}>Update Job</ModalHeader>
@@ -477,11 +505,11 @@ export default class ContentJob extends Component {
                     </Modal> */}
 
                    {/* Delete item  */}
-                   <button type="button" className="btn btn-danger" data-toggle="modal" data-target= {'#aaa'+v.id_job}>
+                    <button type="button" className="btn btn-danger" data-toggle="modal" data-target= {'#aaa'+v.id_job}>
                           <span><FontAwesomeIcon icon={faTrash}/></span>
                         </button>
-
-                        <div className="modal fade" id={'aaa'+v.id_job} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    {/* Delete item  */}
+                    <div className="modal fade" id={'aaa'+v.id_job} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div className="modal-dialog" role="document">
                             <div className="modal-content">
 
@@ -545,3 +573,12 @@ const Styled = styled.div`
     justify-content: center;
   }
 `;
+
+const mapStateProps = state => ({
+  job: state.job,
+  company: state.company,
+  category: state.category,
+})
+
+export default connect(mapStateProps)(ContentJob);
+

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faPlus, faBullseye } from '@fortawesome/free-solid-svg-icons';
 
 import {connect} from 'react-redux';
 import {getCategory} from './../../redux/action/category';
@@ -78,7 +78,7 @@ class ContentCategory extends Component {
     }
     axios({
       method: 'POST',
-      url: 'http://34.205.156.175:3001/category/',
+      url: 'https://freejobpost.site/category/',
       data: qs.stringify(data),
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
@@ -101,7 +101,7 @@ class ContentCategory extends Component {
   handleSubmitDelete = (id) => {
     axios({
       method: 'DELETE',
-      url: 'http://34.205.156.175:3001/category/'+id,
+      url: 'https://freejobpost.site/category/'+id,
       headers : {
         'content-Type': 'application/x-www-form-urlencoded',
         'x-access-token': this.getToken(),
@@ -155,7 +155,7 @@ class ContentCategory extends Component {
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1>Job</h1>
+              <h1>Category</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
@@ -216,6 +216,10 @@ class ContentCategory extends Component {
                       <th scope='row' className='align-middle'>{v.id_category}</th>
                       <td className='align-middle'>{v.name_category}</td>
                       <td className='actionCategory'>
+                        {/* view category */}
+                        <button type="button" className="btn btn-primary" >
+                          <span><FontAwesomeIcon icon={faBullseye}/></span> 
+                        </button>&nbsp;&nbsp;
 
                         {/* Update category */}
                         <button type="button" className="btn btn-warning" data-toggle="modal" data-target= {'#bbb'+v.id_category}>

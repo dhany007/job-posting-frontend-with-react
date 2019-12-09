@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const IP = 'http://34.205.156.175:3001';
+const IP = 'https://freejobpost.site';
 
 export const getJob = query  => {
   return {
