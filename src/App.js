@@ -17,22 +17,22 @@ import {Provider} from 'react-redux';
 import store from './redux/store';
 
 export default class App extends Component {
-  constructor(){
-    super();
-    this.state= {
-      isLogged: false,
-      user: {}
-    }
+  // constructor(){
+  //   super();
+  //   this.state= {
+  //     isLogged: false,
+  //     user: {}
+  //   }
 
-    this.handleLogged = this.handleLogged.bind(this);
-  }
+  //   this.handleLogged = this.handleLogged.bind(this);
+  // }
   
-  handleLogged(data){ 
-    this.setState({
-      isLogged: true,
-      user: data
-    })
-  }
+  // handleLogged(data){ 
+  //   this.setState({
+  //     isLogged: true,
+  //     user: data
+  //   })
+  // }
 
 
   
@@ -42,13 +42,13 @@ export default class App extends Component {
           <Router>
             <Provider store={store}>
               <Switch>
-                <Route
+                {/* <Route
                 path = '/'
                 render = { props => (
                 <Home {...props}
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
-                exact />
+                exact /> */}
 
                 {/* <Route
                 path = '/job'
@@ -57,8 +57,8 @@ export default class App extends Component {
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
                 exact /> */}
-
-                <Route path = '/job' component = {Job} />
+                <Route path ='/' component = {Home} exact />
+                <Route path = '/job' component = {Job} exact />
 
                 {/* <Route
                 path = '/signin'
@@ -67,15 +67,16 @@ export default class App extends Component {
                 handleLogged= {this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
                 exact /> */}
-                <Route path = '/signin' component = {SignIn}/>
+                <Route path = '/signin' component = {SignIn} exact/>
 
-                <Route
+                {/* <Route
                 path = '/signup'
                 render = { props => (
                 <SignUp {...props}
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
-                exact />
+                exact /> */}
+                <Route path ='/signup' component={SignUp} exact/>
 {/*                 
                 <Route
                 path = '/detail/:id_job' 
@@ -86,8 +87,10 @@ export default class App extends Component {
                 /> */}
 
                 <Route path = '/detail/:id_job' component={DetailJob} />
-
-                <Route path = '/dashboard'
+                <Route path = '/dashboard' component = {Dashboard} exact/>
+                <Route path = '/dashboardcompany' component = {DashboardCompany} exact/>
+                <Route path = '/dashboardcategory' component = {DashboardCategory} exact/>
+                {/* <Route path = '/dashboard'
                 render = { props => (
                 <Dashboard {...props}
                 handleLogged={this.handleLogged}
@@ -107,7 +110,7 @@ export default class App extends Component {
                 handleLogged={this.handleLogged}
                 isLogged= {this.state.isLogged} />)}
                 />
-                
+                 */}
                 <Route component = { NoMatch } />
               </Switch>
               <br/>

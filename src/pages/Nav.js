@@ -18,7 +18,7 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogged: this.props.user.isLogged,
+      isLogged: false,
       dropdownOpen: false
     };
     this.toggle = this.toggle.bind(this);
